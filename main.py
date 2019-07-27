@@ -17,34 +17,45 @@ while a < 10**4:
 itimes = []
 qtimes = []
 
-for i in N:
-    print("sorting", i, "elements")
+imatrix = ([], [], [])
+qmatrix = ([], [], [])
 
-    if i == 2500:
-        v1 = gnrt.random_list(i)
-        v2 = gnrt.q_worst_case(i)  # caso peggiore quicksort
+for j in range(3):
+    for i in N:
+        print("sorting", i, "elements")
+        '''
+        if i == 2500:
+            v1 = gnrt.random_list(i)
+            v2 = gnrt.q_worst_case(i)  # caso peggiore quicksort
 
-    elif i == 5000:
-        v1 = gnrt.q_worst_case(i)  # caso migliore insertionsort
-        v2 = gnrt.random_list(i)
+        elif i == 5000:
+            v1 = gnrt.q_worst_case(i)  # caso migliore insertionsort
+            v2 = gnrt.random_list(i)
 
-    elif i == 8000:
-        v1 = gnrt.i_worst_case(i)  # caso peggiore insertionsort
-        v2 = gnrt.random_list(i)
+        elif i == 8000:
+            v1 = gnrt.i_worst_case(i)  # caso peggiore insertionsort
+            v2 = gnrt.random_list(i)
 
-    else:
+        else:
+        '''
         v1 = gnrt.random_list(i)
         v2 = v1[:]
 
-    istart = timer()
-    isrt.insertionsort(v1)
-    iend = timer()
-    itimes.append(iend - istart)
+        istart = timer()
+        isrt.insertionsort(v1)
+        iend = timer()
+        imatrix[j].append(iend - istart)
 
-    qstart = timer()
-    qsrt.quicksort(v2, 0, len(v2) - 1)
-    qend = timer()
-    qtimes.append(qend - qstart)
+        qstart = timer()
+        qsrt.quicksort(v2, 0, len(v2) - 1)
+        qend = timer()
+        qmatrix[j].append(qend - qstart)
+
+for i in range(100):
+    ivalue = (imatrix[0][i]+imatrix[1][i]+imatrix[2][i])/3
+    itimes.append(ivalue)
+    qvalue = (qmatrix[0][i]+qmatrix[1][i]+qmatrix[2][i])/3
+    qtimes.append(qvalue)
 
 plt.plot(N, itimes)
 plt.title("Insertionsort")
