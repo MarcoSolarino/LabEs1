@@ -23,21 +23,7 @@ qmatrix = ([], [], [])
 for j in range(3):
     for i in N:
         print("sorting", i, "elements")
-        '''
-        if i == 2500:
-            v1 = gnrt.random_list(i)
-            v2 = gnrt.q_worst_case(i)  # caso peggiore quicksort
 
-        elif i == 5000:
-            v1 = gnrt.q_worst_case(i)  # caso migliore insertionsort
-            v2 = gnrt.random_list(i)
-
-        elif i == 8000:
-            v1 = gnrt.i_worst_case(i)  # caso peggiore insertionsort
-            v2 = gnrt.random_list(i)
-
-        else:
-        '''
         v1 = gnrt.random_list(i)
         v2 = v1[:]
 
@@ -56,6 +42,24 @@ for i in range(100):
     itimes.append(ivalue)
     qvalue = (qmatrix[0][i]+qmatrix[1][i]+qmatrix[2][i])/3
     qtimes.append(qvalue)
+
+print("Confronto il tempo nel caso peggiore del quicksort")
+v1 = gnrt.q_worst_case(2500)
+v2 = v1[:]
+qwstart = timer()
+qsrt.quicksort(v1, 0, len(v1) - 1)
+qwend = timer()
+qwtime = qwend - qwstart
+
+ibstart = timer()
+isrt.insertionsort(v2)
+ibend = timer()
+ibtime = ibend - ibstart
+
+print("Quicksort = ")
+print(qwtime)
+print(" Insertion = ")
+print(ibtime)
 
 plt.plot(N, itimes)
 plt.title("Insertionsort")
