@@ -10,71 +10,67 @@ sys.setrecursionlimit(10000)
 
 N = []
 a = 0
-while a < 10**4:
-    a = a + 100
+max_elements = 10**3
+passo = 5
+iterazioni = 10
+
+while a < max_elements:
+    a = a + passo
     N.append(a)
 
 itimes = []
 qtimes = []
 
-imatrix = ([], [], [])
-qmatrix = ([], [], [])
 
-for j in range(3):
+for j in range(iterazioni):
+    print("iterazione ", j+1)
+    i_current_tomes = []
+    q_current_times = []
+
     for i in N:
-        print("sorting", i, "elements")
+        vi = gnrt.random_list(i)
+        vq = vi[:]
+        init = timer()
+        isrt.insertionsort(vi)
+        i_current_tomes.append(timer() - init)
 
-        v1 = gnrt.random_list(i)
-        v2 = v1[:]
+        init = timer()
+        qsrt.quicksort(vq, 0, (len(vq) - 1))
+        q_current_times.append(timer() - init)
 
-        istart = timer()
-        isrt.insertionsort(v1)
-        iend = timer()
-        imatrix[j].append(iend - istart)
+    itimes.append(i_current_tomes)
+    qtimes.append(q_current_times)
 
-        qstart = timer()
-        qsrt.quicksort(v2, 0, len(v2) - 1)
-        qend = timer()
-        qmatrix[j].append(qend - qstart)
+i_average = []
+q_average = []
 
-for i in range(100):
-    ivalue = (imatrix[0][i]+imatrix[1][i]+imatrix[2][i])/3
-    itimes.append(ivalue)
-    qvalue = (qmatrix[0][i]+qmatrix[1][i]+qmatrix[2][i])/3
-    qtimes.append(qvalue)
+length_vectors = int(max_elements / passo)
 
-print("Confronto il tempo nel caso peggiore del quicksort")
-v1 = gnrt.q_worst_case(2500)
-v2 = v1[:]
-qwstart = timer()
-qsrt.quicksort(v1, 0, len(v1) - 1)
-qwend = timer()
-qwtime = qwend - qwstart
+for i in range(length_vectors):
+    pi = 0
+    pq = 0
+    for j in range(iterazioni):
+        pi += itimes[j][i]
+        pq += qtimes[j][i]
+    i_average.append(pi/iterazioni)
+    q_average.append(pq/iterazioni)
 
-ibstart = timer()
-isrt.insertionsort(v2)
-ibend = timer()
-ibtime = ibend - ibstart
 
-print("Quicksort = ")
-print(qwtime)
-print(" Insertion = ")
-print(ibtime)
-
-plt.plot(N, itimes)
+plt.plot(N, i_average)
 plt.title("Insertionsort")
 plt.show()
 
 plt.title("Quicksort")
-plt.plot(N, qtimes)
+plt.plot(N, q_average)
 plt.show()
 
 plt.title("Insertionsort & Quicksort")
-plt.plot(N, itimes)
-plt.plot(N, qtimes)
+plt.plot(N, i_average, label="insertionsort")
+plt.plot(N, q_average, label="quicksort")
+plt.legend()
 plt.show()
 
 table = PrettyTable(['N', 'Insertionsort', 'Quicksort'])
-for x in range(0, 100):
-    table.add_row([N[x], itimes[x], qtimes[x]])
+for x in range(length_vectors):
+    table.add_row([N[x], i_average[x], q_average[x]])
 print(table)
